@@ -22,7 +22,34 @@
         .badge-open { background: #dcfce7; color: #15803d; }
         .badge-finished { background: #f4f4f5; color: #71717a; }
         .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-        .podium li { margin: .25rem 0; }
+        .podium { list-style: none; padding: 0; margin: 0; }
+        .podium li { margin: .75rem 0; display: flex; align-items: center; gap: .75rem; padding: .75rem; border-radius: 8px; transition: all 0.3s ease; }
+        .podium li:hover { background: #f9fafb; transform: translateX(4px); }
+        .podium li strong { flex: 1; font-size: 1.1rem; }
+        .podium li span { white-space: nowrap; }
+        .podium .rank { font-size: 1.5rem; font-weight: bold; width: 40px; text-align: center; }
+        .podium .rank-1 { color: #fbbf24; } /* Ouro */
+        .podium .rank-2 { color: #9ca3af; } /* Prata */
+        .podium .rank-3 { color: #b45309; } /* Bronze */
+        .podium .points { font-weight: 600; color: #4f46e5; }
+        .podium .counts { font-size: .85rem; color: #71717a; }
+        .poll-meta { margin: 1rem 0; padding: 1rem; background: #f9fafb; border-radius: 6px; font-size: .9rem; }
+        .poll-meta p { margin: .25rem 0; }
+        .share-btn { background: #059669; margin-top: .5rem; }
+        .share-btn:hover { background: #047857; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .podium li { animation: fadeIn 0.5s ease forwards; }
+        .podium li:nth-child(1) { animation-delay: 0.1s; }
+        .podium li:nth-child(2) { animation-delay: 0.2s; }
+        .podium li:nth-child(3) { animation-delay: 0.3s; }
+        .podium li:nth-child(4) { animation-delay: 0.4s; }
+        .podium li:nth-child(5) { animation-delay: 0.5s; }
+        @media (max-width: 640px) {
+            .container { padding: 0 .5rem; }
+            .card { padding: 1rem; }
+            .podium li { flex-direction: column; align-items: flex-start; gap: .25rem; }
+            .podium .rank { width: auto; }
+        }
     </style>
 </head>
 <body>

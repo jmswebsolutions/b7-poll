@@ -230,6 +230,8 @@ h1 {
 .points {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+  text-align: right;
+  justify-self: end;
 }
 
 .rules {
@@ -370,6 +372,44 @@ h1 {
   box-shadow: 0 0 0 4px rgba(40, 120, 255, .10);
 }
 
+/* Animações suaves */
+.button,
+.pill,
+.icon-button,
+.topbar-link,
+.nav-links a {
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease, color .18s ease;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+  height: 1em;
+  margin-bottom: 0.5em;
+}
+
+.skeleton-text-sm {
+  height: 0.8em;
+  width: 60%;
+}
+
+.skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
 .input-shell img {
   width: 22px;
   height: 22px;
@@ -494,9 +534,47 @@ h1 {
 button:focus-visible,
 label:focus-visible,
 a:focus-visible,
-input:focus-visible {
+input:focus-visible,
+select:focus-visible {
   outline: 3px solid rgba(40, 120, 255, .28);
   outline-offset: 3px;
+}
+
+/* Melhorias de acessibilidade - contraste */
+.eyebrow,
+.pill,
+.nav-links a {
+  color: #005f6b;
+}
+
+.context-copy,
+.rule span,
+.form-copy,
+.note {
+  color: #4a5568;
+}
+
+/* Melhor navegação por teclado */
+select:focus-visible,
+button:focus-visible {
+  outline: 3px solid #2878ff;
+  outline-offset: 2px;
+}
+
+/* Skip link para acessibilidade */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #2878ff;
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
 }
 
 @media (max-width: 1060px) {

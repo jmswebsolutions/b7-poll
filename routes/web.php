@@ -20,5 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [PollController::class, 'index'])->name('polls.index');
     Route::get('/polls/{poll}', [PollController::class, 'show'])->name('polls.show');
     Route::get('/polls/{poll}/results', [PollController::class, 'results'])->name('polls.results');
-    Route::post('/polls/{poll}/vote', [VoteController::class, 'store'])->name('polls.vote');
+    Route::post('/polls/{poll}/vote', [VoteController::class, 'store'])
+        ->middleware('throttle:5,1')
+        ->name('polls.vote');
 });

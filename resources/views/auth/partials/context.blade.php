@@ -1,4 +1,5 @@
 <section class="context-panel" aria-labelledby="context-title">
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
     <div>
         <p class="eyebrow">Live B7Web</p>
         <h1 id="context-title">Entre no pódio da votação</h1>

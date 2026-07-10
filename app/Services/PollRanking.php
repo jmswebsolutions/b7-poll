@@ -4,9 +4,12 @@ namespace App\Services;
 
 use App\Models\Poll;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class PollRanking
 {
+    private const CACHE_TTL_SECONDS = 60;
+
     /**
      * Ranking calculado em tempo de execução para uma votação.
      *
@@ -16,6 +19,33 @@ class PollRanking
      * @return Collection<int, array{rank: int, item: \App\Models\PollItem, points: int, counts: array<int, int>}>
      */
     public function for(Poll $poll): Collection
+    {
+        $cacheKey = $this->cacheKey($poll);
+
+        return Cache::remember($cacheKey, self::CACHE_TTL_SECONDS, function () use ($poll) {
+            return $this->calculate($poll);
+        });
+    }
+
+    /**
+     * Invalida o cache do ranking de uma votação.
+     */
+    public function invalidate(Poll $poll): void
+    {
+        Cache::forget($this->cacheKey($poll));
+    }
+
+    private function cacheKey(Poll $poll): string
+    {
+        return "poll_ranking:{$poll->id}";
+    }
+
+    /**
+     * Calcula o ranking sem cache.
+     *
+     * @return Collection<int, array{rank: int, item: \App\Models\PollItem, points: int, counts: array<int, int>}>
+     */
+    private function calculate(Poll $poll): Collection
     {
         $poll->loadMissing('items');
 
