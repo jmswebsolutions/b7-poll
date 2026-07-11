@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\PollStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,7 +15,7 @@ class PollFactory extends Factory
         return [
             'title' => fake()->sentence(3),
             'description' => fake()->optional()->paragraph(),
-            'status' => 'active',
+            'status' => PollStatus::ACTIVE,
             'podium_size' => 3,
             'expires_at' => now()->addWeek(),
         ];
@@ -29,6 +30,6 @@ class PollFactory extends Factory
     /** Votação desativada manualmente. */
     public function inactive(): static
     {
-        return $this->state(fn () => ['status' => 'inactive']);
+        return $this->state(fn () => ['status' => PollStatus::INACTIVE]);
     }
 }

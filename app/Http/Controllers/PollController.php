@@ -68,8 +68,6 @@ class PollController extends Controller
      */
     public function results(Poll $poll, PollRanking $ranking): View
     {
-        $this->authorize('viewResults', $poll);
-
         return view('polls.results', [
             'poll' => $poll,
             'ranking' => $ranking->for($poll),

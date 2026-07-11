@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Constants\PollConstants;
+use App\Enums\PollStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,8 +26,8 @@ class Poll extends Model
     ];
 
     protected $attributes = [
-        'podium_size' => PollConstants::DEFAULT_PODIUM_SIZE,
-        'status' => PollConstants::STATUS_ACTIVE,
+        'podium_size' => 3,
+        'status' => PollStatus::ACTIVE->value,
     ];
 
     /**
@@ -38,6 +38,7 @@ class Poll extends Model
         return [
             'podium_size' => 'integer',
             'expires_at' => 'datetime',
+            'status' => PollStatus::class,
         ];
     }
 
@@ -69,7 +70,7 @@ class Poll extends Model
      */
     public function scopeOpen(Builder $query): void
     {
-        $query->where('status', 'active')->where('expires_at', '>', now());
+        $query->where('status', PollStatus::ACTIVE)->where('expires_at', '>', now());
     }
 
     /**
@@ -81,7 +82,7 @@ class Poll extends Model
     public function scopeFinished(Builder $query): void
     {
         $query->where(function (Builder $q) {
-            $q->where('status', 'inactive')->orWhere('expires_at', '<=', now());
+            $q->where('status', PollStatus::INACTIVE)->orWhere('expires_at', '<=', now());
         });
     }
 
@@ -92,7 +93,7 @@ class Poll extends Model
      */
     public function isOpen(): bool
     {
-        return $this->status === 'active' && $this->expires_at->isFuture();
+        return $this->status === PollStatus::ACTIVE && $this->expires_at->isFuture();
     }
 
     /**
@@ -103,6 +104,9 @@ class Poll extends Model
      */
     public function pointsForPosition(int $position): int
     {
-        return PollConstants::POINTS_MULTIPLIER * ($this->podium_size - $position) + PollConstants::BASE_POINTS;
+        $multiplier = 2;
+        $base = 1;
+
+        return $multiplier * ($this->podium_size - $position) + $base;
     }
 }

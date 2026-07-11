@@ -24,9 +24,15 @@ class VoteController extends Controller
      */
     public function store(StoreVoteRequest $request, Poll $poll, PollRanking $ranking): RedirectResponse
     {
-        $this->authorize('vote', $poll);
-
         $user = $request->user();
+
+        if (! $poll->isOpen()) {
+            return back()->withErrors(['items' => 'Esta votação não está aberta para votos.']);
+        }
+
+        if ($user->hasVotedOn($poll)) {
+            return back()->withErrors(['items' => 'Você já votou nesta votação.']);
+        }
 
         $vote = DB::transaction(function () use ($request, $poll, $user) {
             $vote = $poll->votes()->create(['user_id' => $user->id]);

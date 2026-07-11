@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Enums\PollStatus;
 use App\Models\Poll;
 use App\Models\PollItem;
 use App\Models\User;
@@ -33,7 +34,7 @@ class PollModelTest extends TestCase
     public function test_is_open_true_when_active_and_future(): void
     {
         $poll = Poll::factory()->make([
-            'status' => 'active',
+            'status' => PollStatus::ACTIVE,
             'expires_at' => now()->addDay(),
         ]);
 
@@ -43,11 +44,11 @@ class PollModelTest extends TestCase
     public function test_is_open_false_when_inactive_or_expired(): void
     {
         $inactive = Poll::factory()->make([
-            'status' => 'inactive',
+            'status' => PollStatus::INACTIVE,
             'expires_at' => now()->addDay(),
         ]);
         $expired = Poll::factory()->make([
-            'status' => 'active',
+            'status' => PollStatus::ACTIVE,
             'expires_at' => now()->subDay(),
         ]);
 

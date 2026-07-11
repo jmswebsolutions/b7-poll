@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\PollStatus;
 use App\Models\Poll;
 use App\Models\User;
 use App\Models\Vote;
@@ -25,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $live = Poll::factory()->create([
             'title' => 'Melhores Projetos da Live',
             'description' => 'Vote nos 3 melhores projetos apresentados hoje.',
-            'status' => 'active',
+            'status' => PollStatus::ACTIVE,
             'podium_size' => 3,
             'expires_at' => now()->addWeek(),
         ]);
@@ -43,7 +44,7 @@ class DatabaseSeeder extends Seeder
         $big = Poll::factory()->create([
             'title' => 'Top 5 Ferramentas Dev',
             'description' => 'Monte seu top 5 favorito.',
-            'status' => 'active',
+            'status' => PollStatus::ACTIVE,
             'podium_size' => 5,
             'expires_at' => now()->addDays(3),
         ]);
