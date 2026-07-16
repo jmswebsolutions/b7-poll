@@ -10,7 +10,7 @@
         <p class="muted">Pódio de {{ $poll->podium_size }} · cálculo em tempo real.</p>
 
         <div class="poll-meta">
-            <p><strong>Status:</strong> @if($poll->status === 'active' && $poll->expires_at > now()) <span class="badge badge-open">Em andamento</span> @else <span class="badge badge-finished">Finalizada</span> @endif</p>
+            <p><strong>Status:</strong> @if($poll->status === \App\Enums\PollStatus::ACTIVE && $poll->expires_at > now()) <span class="badge badge-open">Em andamento</span> @else <span class="badge badge-finished">Finalizada</span> @endif</p>
             <p><strong>Encerra em:</strong> {{ $poll->expires_at->format('d/m/Y H:i') }}</p>
             <p><strong>Total de votos:</strong> {{ $poll->votes()->count() }}</p>
         </div>
