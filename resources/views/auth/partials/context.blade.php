@@ -11,10 +11,18 @@
 
         <aside class="ranking-card" aria-label="Prévia do pódio">
             <h2>Pódio da Live</h2>
-            <ol class="ranking-list">
-                <li><span class="rank">1</span><span>DevFlow</span><span class="points">128 pts</span></li>
-                <li><span class="rank">2</span><span>TaskLab</span><span class="points">117 pts</span></li>
-                <li><span class="rank">3</span><span>MentorIA</span><span class="points">96 pts</span></li>
+            <ol class="ranking-list" id="live-podium">
+                @php
+                    $livePoll = \App\Models\Poll::open()->first();
+                    $ranking = $livePoll ? app(\App\Services\PollRanking::class)->for($livePoll)->take(3) : collect();
+                @endphp
+                @if($ranking->isNotEmpty())
+                    @foreach($ranking as $row)
+                        <li><span class="rank">{{ $row['rank'] }}</span>@if($row['item']->url)<a href="{{ $row['item']->url }}" target="_blank" style="color: inherit; text-decoration: none;">{{ $row['item']->name }}</a>@else<span>{{ $row['item']->name }}</span>@endif<span class="points">{{ $row['points'] }} pts</span></li>
+                    @endforeach
+                @else
+                    <li><span class="rank">-</span><span>Aguardando votos...</span><span class="points">0 pts</span></li>
+                @endif
             </ol>
         </aside>
     </div>

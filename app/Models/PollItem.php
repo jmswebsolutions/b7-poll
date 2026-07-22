@@ -16,7 +16,9 @@ class PollItem extends Model
     protected $fillable = [
         'poll_id',
         'name',
+        'author',
         'description',
+        'url',
     ];
 
     /** @return BelongsTo<Poll, $this> */

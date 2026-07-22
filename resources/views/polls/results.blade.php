@@ -25,7 +25,11 @@
                         @else {{ $index + 1 }}
                         @endif
                     </span>
-                    <strong>{{ $row['item']->name }}</strong>
+                    @if($row['item']->url)
+                        <strong><a href="{{ $row['item']->url }}" target="_blank" style="color: inherit; text-decoration: none;">{{ $row['item']->name }}</a></strong>
+                    @else
+                        <strong>{{ $row['item']->name }}</strong>
+                    @endif
                     <span class="points">{{ $row['points'] }} pts</span>
                     @if (! empty($row['counts']))
                         <span class="counts">

@@ -73,4 +73,43 @@ class PollController extends Controller
             'ranking' => $ranking->for($poll),
         ]);
     }
+
+    /**
+     * API endpoint para obter ranking em tempo real.
+     *
+     * @param  \App\Models\Poll  $poll
+     * @param  \App\Services\PollRanking  $ranking
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function ranking(Poll $poll, PollRanking $ranking)
+    {
+        return response()->json([
+            'ranking' => $ranking->for($poll)->take(3),
+            'votes_count' => $poll->votes()->count(),
+        ]);
+    }
+
+    /**
+     * API endpoint público para obter pódio da live (sem autenticação).
+     *
+     * @param  \App\Services\PollRanking  $ranking
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function livePodium(PollRanking $ranking)
+    {
+        $livePoll = Poll::open()->first();
+
+        if (!$livePoll) {
+            return response()->json([
+                'ranking' => [],
+                'poll_id' => null,
+            ]);
+        }
+
+        return response()->json([
+            'ranking' => $ranking->for($livePoll)->take(3),
+            'poll_id' => $livePoll->id,
+            'votes_count' => $livePoll->votes()->count(),
+        ]);
+    }
 }

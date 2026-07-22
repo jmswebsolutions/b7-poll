@@ -81,5 +81,32 @@
       </section>
     </main>
   </div>
+
+  <script>
+    // Real-time podium updates for register page
+    document.addEventListener('DOMContentLoaded', function() {
+      const livePodium = document.getElementById('live-podium');
+
+      if (livePodium) {
+        // Update podium every 5 seconds using public API
+        setInterval(async () => {
+          try {
+            const response = await fetch('/live-podium');
+            const data = await response.json();
+
+            if (livePodium && data.ranking && data.ranking.length > 0) {
+              livePodium.innerHTML = data.ranking.map(row => `
+                <li><span class="rank">${row.rank}</span>${row.item.url ? `<a href="${row.item.url}" target="_blank" style="color: inherit; text-decoration: none;">${row.item.name}</a>` : `<span>${row.item.name}</span>`}<span class="points">${row.points} pts</span></li>
+              `).join('');
+            } else if (livePodium) {
+              livePodium.innerHTML = '<li><span class="rank">-</span><span>Aguardando votos...</span><span class="points">0 pts</span></li>';
+            }
+          } catch (error) {
+            console.error('Error fetching live podium:', error);
+          }
+        }, 5000); // 5 seconds
+      }
+    });
+  </script>
 </body>
 </html>

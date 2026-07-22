@@ -106,17 +106,21 @@
               </div>
 
               @unless ($voted)
-                <aside class="podium-panel" aria-label="Prévia do pódio">
+                <aside class="podium-panel" aria-label="Prévia do pódio" data-poll-id="{{ $poll->id }}">
                   <div class="podium-kicker">
                     <span>Pódio atual</span>
                     <span>ao vivo</span>
                   </div>
                   <img src="{{ asset('assets/premium-home/podium.svg') }}" alt="">
-                  <ol class="ranking-mini">
+                  <ol class="ranking-mini" id="ranking-{{ $poll->id }}">
                     @foreach ($previews[$poll->id] as $row)
                       <li>
                         <span class="rank">{{ $row['rank'] }}</span>
-                        <span>{{ $row['item']->name }}</span>
+                        @if($row['item']->url)
+                          <a href="{{ $row['item']->url }}" target="_blank" style="color: inherit; text-decoration: none;">{{ $row['item']->name }}</a>
+                        @else
+                          <span>{{ $row['item']->name }}</span>
+                        @endif
                         <span class="score">{{ $row['points'] }} pts</span>
                       </li>
                     @endforeach
@@ -187,5 +191,43 @@
       </aside>
     </div>
   </main>
+
+  <script>
+    // Real-time ranking updates
+    document.addEventListener('DOMContentLoaded', function() {
+      const podiumPanels = document.querySelectorAll('.podium-panel[data-poll-id]');
+
+      podiumPanels.forEach(panel => {
+        const pollId = panel.getAttribute('data-poll-id');
+        const rankingList = panel.querySelector('.ranking-mini');
+
+        // Update ranking every 5 seconds
+        setInterval(async () => {
+          try {
+            const response = await fetch(`/polls/${pollId}/ranking`);
+            const data = await response.json();
+
+            // Update ranking list
+            rankingList.innerHTML = data.ranking.map(row => `
+              <li>
+                <span class="rank">${row.rank}</span>
+                ${row.item.url ? `<a href="${row.item.url}" target="_blank" style="color: inherit; text-decoration: none;">${row.item.name}</a>` : `<span>${row.item.name}</span>`}
+                <span class="score">${row.points} pts</span>
+              </li>
+            `).join('');
+
+            // Update vote count if visible
+            const voteCountElement = panel.closest('.poll-card').querySelector('.meta-item:last-child span');
+            if (voteCountElement) {
+              const count = data.votes_count;
+              voteCountElement.textContent = `${count} ${count === 1 ? 'voto registrado' : 'votos registrados'}`;
+            }
+          } catch (error) {
+            console.error('Error fetching ranking:', error);
+          }
+        }, 5000); // 5 seconds
+      });
+    });
+  </script>
 </body>
 </html>

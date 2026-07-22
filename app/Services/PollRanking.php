@@ -20,11 +20,13 @@ class PollRanking
      */
     public function for(Poll $poll): Collection
     {
-        $cacheKey = $this->cacheKey($poll);
-
-        return Cache::remember($cacheKey, self::CACHE_TTL_SECONDS, function () use ($poll) {
-            return $this->calculate($poll);
-        });
+        // Temporarily disabled cache to fix __PHP_Incomplete_Class error
+        // TODO: Re-enable cache after clearing stale data
+        // $cacheKey = $this->cacheKey($poll);
+        // return Cache::remember($cacheKey, self::CACHE_TTL_SECONDS, function () use ($poll) {
+        //     return $this->calculate($poll);
+        // });
+        return $this->calculate($poll);
     }
 
     /**
