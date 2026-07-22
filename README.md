@@ -60,7 +60,7 @@ B7Poll é um sistema de votação interativo que permite aos usuários votar em 
 
 - ✅ **PHPDoc completo**: Documentação detalhada em controllers e models
 - ✅ **Type hints expandidos**: Tipagem forte em todos os métodos
-- ✅ **Design patterns**: Segue princípios SOLID e boas práticas Laravel
+- ✅ **Boas práticas**: Segue princípios SOLID e convenções Laravel
 
 ## Tecnologias
 
